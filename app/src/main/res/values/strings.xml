@@ -4,18 +4,7 @@
     <string name="start_button">Quiz  Start</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="question_title">Queston</string>
     <string name="question_title">Question</string>
-    <string name="question_title">Question</string>
-    <string name="question_title">Question</string>
-    <string name="question_title">Q</string>
-    <string name="question_title">Q</string>
-    <string name="question_title">Qu</string>
-    <string name="question_title">Que</string>
-    <string name="question_title">Ques</string>
-    <string name="question_title">Questi</string>
-    <string name="question_title">Questi</string>
-    <string name="question_title">Questio</string>
-    <string name="question_title">Question</string>
-    <string name="question_title">Question</string>
+    <string name="next_button">next</string>
+    <string name="result_title">Result</string>
 </resources>

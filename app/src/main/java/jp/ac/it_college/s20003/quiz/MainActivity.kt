@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener { onStartButtonTapped(it) }
     }
 
-    fun onStartButtonTapped(view: View?) {
+    private fun onStartButtonTapped(view: View?) {
         val intent = Intent(this, QuizActivity::class.java)
         startActivity(intent)
     }
