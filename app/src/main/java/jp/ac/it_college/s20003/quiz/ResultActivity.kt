@@ -2,7 +2,6 @@ package jp.ac.it_college.s20003.quiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import jp.ac.it_college.s20003.quiz.databinding.ActivityQuizBinding
 import jp.ac.it_college.s20003.quiz.databinding.ActivityResultBinding
 
 class ResultActivity : AppCompatActivity() {

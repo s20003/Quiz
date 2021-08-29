@@ -3,7 +3,6 @@ package jp.ac.it_college.s20003.quiz
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import jp.ac.it_college.s20003.quiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -14,10 +13,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.startButton.setOnClickListener { onStartButtonTapped(it) }
+        binding.startButton.setOnClickListener { onStartButtonTapped() }
     }
 
-    private fun onStartButtonTapped(view: View?) {
+    private fun onStartButtonTapped() {
         val intent = Intent(this, QuizActivity::class.java)
         startActivity(intent)
     }
