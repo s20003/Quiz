@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -14,21 +13,16 @@ import jp.ac.it_college.s20003.quiz.databinding.ActivityQuizBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.StringReader
-import java.time.temporal.TemporalAdjusters.next
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 class QuizActivity : AppCompatActivity() {
     private lateinit var binding: ActivityQuizBinding
 
     private var quizData: ArrayList<String> = arrayListOf()
+    //正解カウント
     private var i: Int = 0
     //問題数カウント
-    private var j: Int = 0
-    private var ans: String = ""
-
-
+    private var q: Int = 0
 
 
     @SuppressLint("SetTextI18n")
@@ -59,7 +53,8 @@ class QuizActivity : AppCompatActivity() {
         val choice4: Button = binding.button4
         val next: Button = binding.nextButton
 
-        qusTitle.text = "問題${j + 1}"
+        next.isEnabled = false
+        qusTitle.text = "問題${q + 1}"
 
         val questionData = arrayOf(
             arrayOf(quizData[6], quizData[8], quizData[9], quizData[10], quizData[11]),
@@ -74,33 +69,23 @@ class QuizActivity : AppCompatActivity() {
             arrayOf(quizData[60], quizData[62], quizData[63], quizData[64], quizData[65]),
         )
 
-        //qus.text = titles[0]
-
-        val randomNum = Random.nextInt(questionData.size)
-        val quiz: Array<String> = questionData[randomNum]
-
-        //問題分のセット
-        qus.text = quiz[0]
-        //正解のセット
-        ans = quiz[1]
-        //問題の消去
-        quiz.drop(0)
+        //問題文のセット
+        qus.text = questionData[q][0]
         //選択肢シャッフル
-        val list: List<Int> = listOf(4, 1, 2, 3)
-        val n: List<Int> = list.shuffled()
+        val list: List<Int> = listOf(1, 2, 3, 4)
+        val num: List<Int> = list.shuffled()
         //表示
-        choice1.text = quiz[n[0]]
-        choice2.text = quiz[n[1]]
-        choice3.text = quiz[n[2]]
-        choice4.text = quiz[n[3]]
-
-        questionData.drop(randomNum)
+        choice1.text = questionData[q][num[0]]
+        choice2.text = questionData[q][num[1]]
+        choice3.text = questionData[q][num[2]]
+        choice4.text = questionData[q][num[3]]
 
         //正解数セット
         cnt.text = i.toString()
 
         choice1.setOnClickListener {
-            if (choice1.text == ans) {
+            next.isEnabled = true
+            if (choice1.text == questionData[q][num[1]]) {
                 correct()
             } else{
                 incorrect()
@@ -108,7 +93,8 @@ class QuizActivity : AppCompatActivity() {
         }
 
         choice2.setOnClickListener {
-            if (choice2.text == ans) {
+            next.isEnabled = true
+            if (choice2.text == questionData[q][num[1]]) {
                 correct()
             } else{
                 incorrect()
@@ -116,7 +102,8 @@ class QuizActivity : AppCompatActivity() {
         }
 
         choice3.setOnClickListener {
-            if (choice3.text == ans) {
+            next.isEnabled = true
+            if (choice3.text == questionData[q][num[1]]) {
                 correct()
             } else{
                 incorrect()
@@ -124,47 +111,46 @@ class QuizActivity : AppCompatActivity() {
         }
 
         choice4.setOnClickListener {
-            if (choice4.text == ans) {
+            next.isEnabled = true
+            if (choice4.text == questionData[q][num[1]]) {
                 correct()
             } else{
                 incorrect()
             }
         }
 
-        binding.nextButton.setOnClickListener { onNextButtonTapped(it) }
-    }
+        next.setOnClickListener {
+            //問題数カウント
+            q++
+            if (q == 10) {
+                val intent = Intent(this, ResultActivity::class.java)
+                intent.putExtra("ANSWER", i)
+                startActivity(intent)
+                finish()
+            } else {
 
-    /*
-    fun checkAnswer(view: View?) {
-        val ansBtn: Button = findViewById(view?.id!!)
-        val btnText = ansBtn.text.toString()
+                //qusTitleの表示
+                qusTitle.text = "問題${q + 1}"
 
-        val alertTitle: String
-        if (btnText == ans) {
-            alertTitle = "正解"
-            i++
-        } else {
-            alertTitle = "不正解"
-        }
+                //問題文の表示
+                qus.text = questionData[q][0]
 
-        //ダイアログ作成
-        AlertDialog.Builder(this)
-            .setTitle(alertTitle)
-            .setMessage("答え : $ans")
-            .setPositiveButton("OK") { _, _ ->
-                if (i == 10) {
+                val qusNext = list.shuffled()
+                choice1.text = questionData[q][qusNext[0]]
+                choice2.text = questionData[q][qusNext[1]]
+                choice3.text = questionData[q][qusNext[2]]
+                choice4.text = questionData[q][qusNext[3]]
 
-                } else {
-                    i++
-                }
+                //選択肢の有効化
+                choice1.isEnabled = true
+                choice2.isEnabled = true
+                choice3.isEnabled = true
+                choice4.isEnabled = true
+                next.isEnabled = false
+
             }
-            .setCancelable(false)
-            .show()
-
-
+        }
     }
-
-     */
 
     private fun correct() {
         val cnt: TextView = binding.count
@@ -201,10 +187,5 @@ class QuizActivity : AppCompatActivity() {
         choice2.isEnabled = false
         choice3.isEnabled = false
         choice4.isEnabled = false
-    }
-
-    private fun onNextButtonTapped(view: View?) {
-        val intent = Intent(this, ResultActivity::class.java)
-        startActivity(intent)
     }
 }
