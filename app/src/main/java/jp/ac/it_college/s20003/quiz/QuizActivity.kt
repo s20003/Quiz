@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -46,7 +47,7 @@ class QuizActivity : AppCompatActivity() {
 
         val qusTitle: TextView = binding.questionTitle
         val qus: TextView = binding.question
-        val cnt: TextView = binding.count
+        val timerView = binding.timer
         val choice1: Button = binding.button1
         val choice2: Button = binding.button2
         val choice3: Button = binding.button3
@@ -69,6 +70,26 @@ class QuizActivity : AppCompatActivity() {
             arrayOf(quizData[60], quizData[62], quizData[63], quizData[64], quizData[65]),
         )
 
+        val timer = object : CountDownTimer(10000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val second = millisUntilFinished / 1000L % 60L
+                timerView.text = second.toString()
+            }
+
+            override fun onFinish() {
+                next.isEnabled = true
+                AlertDialog.Builder(this@QuizActivity)
+                    .setTitle("時間切れ")
+                    .setPositiveButton("OK", null)
+                    .show()
+
+                choice1.isEnabled = false
+                choice2.isEnabled = false
+                choice3.isEnabled = false
+                choice4.isEnabled = false
+            }
+        }.start()
+
         //問題文のセット
         qus.text = questionData[q][0]
         //選択肢シャッフル
@@ -81,11 +102,12 @@ class QuizActivity : AppCompatActivity() {
         choice4.text = questionData[q][num[3]]
 
         //正解数セット
-        cnt.text = i.toString()
+        //cnt.text = i.toString()
 
         choice1.setOnClickListener {
             next.isEnabled = true
-            if (choice1.text == questionData[q][num[1]]) {
+            timer.cancel()
+            if (choice1.text == questionData[q][1]) {
                 correct()
             } else{
                 incorrect()
@@ -94,7 +116,8 @@ class QuizActivity : AppCompatActivity() {
 
         choice2.setOnClickListener {
             next.isEnabled = true
-            if (choice2.text == questionData[q][num[1]]) {
+            timer.cancel()
+            if (choice2.text == questionData[q][1]) {
                 correct()
             } else{
                 incorrect()
@@ -103,7 +126,8 @@ class QuizActivity : AppCompatActivity() {
 
         choice3.setOnClickListener {
             next.isEnabled = true
-            if (choice3.text == questionData[q][num[1]]) {
+            timer.cancel()
+            if (choice3.text == questionData[q][1]) {
                 correct()
             } else{
                 incorrect()
@@ -112,7 +136,8 @@ class QuizActivity : AppCompatActivity() {
 
         choice4.setOnClickListener {
             next.isEnabled = true
-            if (choice4.text == questionData[q][num[1]]) {
+            timer.cancel()
+            if (choice4.text == questionData[q][1]) {
                 correct()
             } else{
                 incorrect()
@@ -129,6 +154,7 @@ class QuizActivity : AppCompatActivity() {
                 finish()
             } else {
 
+                timer.start()
                 //qusTitleの表示
                 qusTitle.text = "問題${q + 1}"
 
@@ -150,10 +176,10 @@ class QuizActivity : AppCompatActivity() {
 
             }
         }
+
     }
 
     private fun correct() {
-        val cnt: TextView = binding.count
         val choice1: Button = binding.button1
         val choice2: Button = binding.button2
         val choice3: Button = binding.button3
@@ -165,7 +191,6 @@ class QuizActivity : AppCompatActivity() {
             .show()
 
         ++i
-        cnt.text = i.toString()
         choice1.isEnabled = false
         choice2.isEnabled = false
         choice3.isEnabled = false

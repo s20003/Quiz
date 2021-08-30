@@ -1,5 +1,6 @@
 package jp.ac.it_college.s20003.quiz
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import jp.ac.it_college.s20003.quiz.databinding.ActivityResultBinding
@@ -7,6 +8,7 @@ import jp.ac.it_college.s20003.quiz.databinding.ActivityResultBinding
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
@@ -17,7 +19,7 @@ class ResultActivity : AppCompatActivity() {
 
         val resultView = binding.resultView
 
-        resultView.text = ansView
+        resultView.text = "$ansView / 10"
 
     }
 }
